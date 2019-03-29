@@ -52,20 +52,15 @@ create table preference (
     constraint foreign key (user_prefers) references user(user_id)
 );
 
--- Availability is a general time of day like morning, afternoon, evening, or night 
-drop table if exists availability;
-create table availability (
-	availability_id int primary key,
-    availability_description varchar(100)
-);
-
 drop table if exists user_availability;
 create table user_availability (
+	availability_id int primary key, -- allows us to find a particular availability and examine it 
 	user_id int,
-    availability_id int,
+    day ENUM('Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'),
+    start_time TIME,
+    end_time TIME,
     
-    constraint foreign key (user_id) references user(user_id),
-    constraint foreign key (availability_id) references availability(availability_id)
+    constraint foreign key (user_id) references user(user_id)
 );
 
 drop table if exists project_group;
@@ -82,8 +77,5 @@ create table group_member (
     constraint foreign key (user_id) references user(user_id),
     constraint foreign key (group_id) references project_group(group_id)
 );
-
--- Error Code: 1822. Failed to add the foreign key constraint. Missing index for constraint 'group_member_ibfk_1' in the referenced table 'project_group'
-
 
 
