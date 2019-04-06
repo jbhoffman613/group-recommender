@@ -1,4 +1,5 @@
-import pymysql, config, csv
+import pymysql, csv
+from . import config
 
 connection = pymysql.connect(host='localhost',
                              charset='utf8mb4',
