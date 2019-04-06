@@ -149,3 +149,5 @@ docs_site/
 # Vagrant
 .vagrant/*
 ubuntu*
+
+config.py
