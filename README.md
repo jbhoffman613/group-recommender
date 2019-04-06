@@ -1,2 +1,2 @@
-# real-estate-recommender
-A real estate recommendation engine built in neo4J
+# Group Formation Recommender
+A group project formation recommender engine written in Python and MySQL
