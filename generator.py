@@ -8,11 +8,16 @@ csv_name = "responses.csv"
 
 try:
     with connection.cursor() as cursor:
-        creation = ["drop database if exists grs", "create database grs"]
+        creation = ["CREATE database IF NOT EXISTS grs "]
         for query in creation:
             cursor.execute(query)
 finally:
     connection.close()
-    
+
+def read_csv(csv_file_name):
+    with open(csv_file_name, newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        for row in spamreader:
+            print(', '.join(row))
 
 read_csv(csv_name)
