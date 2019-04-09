@@ -21,7 +21,7 @@ def read_csv(csv_file_name):
     skillset = skillset.loc[skillset['value'] != 'Not known']
     skillset['variable'] = skillset['variable'].map(lambda x: skills[x])
     skillset.rename(columns={'variable': 'skill_id'}, inplace=True)
-    skills = pd.DataFrame.from_dict(dict(enumerate(skills.items())), orient='index', columns={'skill_name', 'skill_id'})
+    skills = pd.DataFrame.from_dict(dict(enumerate(skills.items())), orient='index', columns=['skill_name', 'skill_id'])
     # Creates availability off pivots
     availability_cols = ['What is your availability? [Monday]',
                          'What is your availability? [Tuesday]',
@@ -104,9 +104,9 @@ def read_csv(csv_file_name):
     teams['group_id'] = teams['group_name'].map(lambda x: team_names_to_ids[x])
     teams.drop(columns={'group_name'}, inplace=True)
     team_names_to_ids = pd.DataFrame.from_dict(dict(enumerate(team_names_to_ids.items())), orient='index',
-                                               columns={'group_name', 'group_id'})
+                                               columns=['group_name', 'group_id'])
     interest_ids = pd.DataFrame.from_dict(dict(enumerate(interest_ids.items())), orient='index',
-                                          columns={'interest_name', 'interest_id'})
+                                          columns=['interest_name', 'interest_id'])
     keys = ['user', 'skill', 'skillset', 'availability', 'interest_id', 'user_interest', 'team_preference',
             'project_group', 'team']
     return dict(zip(keys, (user, skills, skillset, availability,
