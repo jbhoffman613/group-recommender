@@ -4,6 +4,7 @@ pd.options.mode.chained_assignment = None
 
 
 def read_csv(csv_file_name):
+    print('Reading input..', '\n\n')
     file = pd.read_csv(csv_file_name)
     file['user_id'] = file.index
     user = file[['user_id', 'Name', 'Email', 'Phone Number', 'Year (1 through 5)', 'Current grade in class (0-100)']]
