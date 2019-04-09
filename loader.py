@@ -47,13 +47,7 @@ try:
             values = ', '.join(['(' + ', '.join([sval(val) for val in list(row.values)]) + ')'
                                 for _, row in table.iterrows()])
             value_inserter = "INSERT INTO {} VALUES {}".format(name, values)
-            try:
-                cursor.execute(value_inserter)
-            except Exception as e:
-                print(e, ':', value_inserter)
-                print(table)
-                connection.close()
-                sys.exit(1)
+            execute(value_inserter)
 
 finally:
     if connection.open:
