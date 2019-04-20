@@ -4,6 +4,7 @@ from flask_bootstrap import Bootstrap
 from recommender.controller import Controller
 
 # Create app
+
 app = Flask(__name__)
 # Add bootstrap to app
 
