@@ -4,6 +4,7 @@
 class Controller:
 
     def get_recommendations(self, email):
+        print("The user to match on is: {}".format(email))
         return self.get_ideal()
 
     def get_ideal(self):
