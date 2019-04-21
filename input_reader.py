@@ -61,7 +61,7 @@ def read_csv(csv_file_name):
     availability = availability[['user_id', 'day', 'start', 'end']]
 
     # project interest
-    interests_on_form = ['Web App', 'Data Collection', 'Analysis', 'Visualization', 'Non-relational Database']
+    interests_on_form = ['Web App', 'Data Collection', 'Analysis', 'Visualization', 'Non-relational Database', 'I do not care']
     interest_ids = dict(zip(interests_on_form, [x for x in range(len(interests_on_form))]))
 
     # user interests

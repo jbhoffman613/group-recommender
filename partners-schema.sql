@@ -25,7 +25,6 @@ create table skillset (
 	user_id int NOT NULL,
 	skill_id int NOT NULL,
     level ENUM('beginner', 'intermediate', 'advanced'),
-    
     constraint foreign key (user_id) references user(user_id),
     constraint foreign key (skill_id) references skill(skill_id)
 );
