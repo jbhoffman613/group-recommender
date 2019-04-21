@@ -3,19 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Project Group Recommender</title>
-    <style>
-      .boxed {
-        border: 4px solid green;
-        margin: 4px
-      }
+    <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
 </style>
 </head>
   <body>
-    <div>
+    <div class="form-group">
       <form name="submitEmail" method="POST">
-        <input name="text">
-        <input type="submit" value="submit email">
+        <div class="col-sm">
+          <label for="exampleInputEmail1">Email address</label>
+          <input name="text" type="email" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <div class="form-group row">
+          <div class="offset-sm-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
       </form>
     </div>
   </body>
 </html>
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Group Recommender</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
+</style>
+</head>
+  <body>
+    <div class="form-group">
+      <form name="submitEmail" method="POST">
+        <div>
+          <label for="exampleInputEmail1">Email address</label>
+          <input type="email" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </body>
+</html> -->
+
+
+
+<!-- <form name="submitEmail" method="POST">
+  <input name="text">
+  <input type="submit" value="submit email">
+</form> -->
