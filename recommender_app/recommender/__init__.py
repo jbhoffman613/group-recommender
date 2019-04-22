@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, url_for
 from flask_bootstrap import Bootstrap
 from recommender.controller import Controller
 from recommender.model.model import Model
-from recommender.model.config_flask import Config
+from recommender.model.config_flask import MyConfig
 
 # Create app
 

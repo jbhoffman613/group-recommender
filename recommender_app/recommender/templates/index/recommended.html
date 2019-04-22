@@ -19,8 +19,8 @@
         {% for user in users %}
         <div class="boxed">
           {{ user.username }} <br>
-          <a href="{{ user.email }}">{{ user.email }}</a><br>
-          {{ user.phonenumber }} <br>
+          <strong>Email: </strong><a href="{{ user.email }}">{{ user.email }}</a><br>
+          <strong>Phone number: </strong>{{ user.phonenumber }} <br>
           <strong>Skills:</strong>
           {% for skill in user.skills %}
             {{ skill }}

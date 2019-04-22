@@ -1,11 +1,11 @@
 from mysql.connector import (connection)
-from recommender.model.config_flask import Config
+from recommender.model.config_flask import MyConfig
 
 
 class Model:
 
     def __init__(self):
-        config = Config()
+        config = MyConfig()
         ''' Sets up basic connection and a cursor that returns each row as a dictioary'''
 
         self.cnx = connection.MySQLConnection(user=config.MYSQL['user'],
