@@ -81,17 +81,17 @@ def read_csv(csv_file_name):
     user_interest = user_interest[['user_id', 'interest_id']]
 
     # Team preferences
-    team_preference = file[['user_id', 'Who would you prefer to work with? (email)',
+    user_preference = file[['user_id', 'Who would you prefer to work with? (email)',
                             'Second person you would prefer to work with? (email) ', ]]
     user_email = dict(zip(file['Email'], file['user_id']))
     # Pivots to have all emails in one column
-    team_preference = team_preference.melt(id_vars=['user_id'])
-    team_preference = team_preference.dropna()
-    team_preference['user_prefers'] = team_preference['value'].map(
+    user_preference = user_preference.melt(id_vars=['user_id'])
+    user_preference = user_preference.dropna()
+    user_preference['user_prefers'] = user_preference['value'].map(
         lambda x: user_email[x] if x in user_email.keys() else -1)
-    team_preference = team_preference[['user_id', 'user_prefers']]
+    user_preference = user_preference[['user_id', 'user_prefers']]
     # remove preferences where there is no user
-    team_preference = team_preference[team_preference['user_prefers'] != -1]
+    user_preference = user_preference[user_preference['user_prefers'] != -1]
 
     # Teams
     teams = file[['user_id', 'If you\'re in a group, what is your group name? ']]
@@ -108,7 +108,7 @@ def read_csv(csv_file_name):
                                                columns=['group_name', 'group_id'])
     interest_ids = pd.DataFrame.from_dict(dict(enumerate(interest_ids.items())), orient='index',
                                           columns=['interest_name', 'interest_id'])
-    keys = ['user', 'skill', 'skillset', 'availability', 'interest_id', 'user_interest', 'team_preference',
+    keys = ['user', 'skill', 'skillset', 'availability', 'interest_id', 'user_interest', 'user_preference',
             'project_group', 'team']
     return dict(zip(keys, (user, skills, skillset, availability,
-                           interest_ids, user_interest, team_preference, team_names_to_ids, teams)))
+                           interest_ids, user_interest, user_preference, team_names_to_ids, teams)))

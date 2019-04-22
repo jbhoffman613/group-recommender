@@ -1,0 +1,7 @@
+class MyConfig:
+
+    def __init__(self):
+        self.MYSQL = {"port": 3306,
+                      "user": "root",
+                      "password": "PASSWORD",
+                      "host": '127.0.0.1'}

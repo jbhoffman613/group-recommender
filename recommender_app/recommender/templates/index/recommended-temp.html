@@ -1,0 +1,67 @@
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Pricing</a>
+      </li>
+    </ul>
+    <span class="navbar-text">
+      Navbar text with an inline element
+    </span>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div>
+  <strong>{{ searcher_text }}</strong>
+</div>
+<div class="card">
+    {% for user in users %}
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        {{ user.username }} <br>
+        <a href="{{ user.email }}">{{ user.email }}</a><br>
+        {{ user.phonenumber }} <br>
+        <strong>Skills:</strong>
+        {% for skill in user.skills %}
+          {{ skill }}
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+</div>
+<div>
+  <a href="/"><input type="button" value="Try Again"></a>
+</div>
+{% endblock %}
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Group Recommender</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
+</style>
+</head>
+  <body>
+    <div class="form-group">
+      <form name="submitEmail" method="POST">
+        <div>
+          <label for="exampleInputEmail1">Email address</label>
+          <input type="email" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </body> -->
+</html>

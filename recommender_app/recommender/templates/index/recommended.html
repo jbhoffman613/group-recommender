@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Project Group Recommender</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
     <style>
       .boxed {
         border: 4px solid green;
@@ -18,8 +19,8 @@
         {% for user in users %}
         <div class="boxed">
           {{ user.username }} <br>
-          <a href="{{ user.email }}">{{ user.email }}</a><br>
-          {{ user.phonenumber }} <br>
+          <strong>Email: </strong><a href="{{ user.email }}">{{ user.email }}</a><br>
+          <strong>Phone number: </strong>{{ user.phonenumber }} <br>
           <strong>Skills:</strong>
           {% for skill in user.skills %}
             {{ skill }}
@@ -28,7 +29,7 @@
         {% endfor %}
     </div>
     <div>
-      <a href=""><input type="button" value="Try Again"></a>
+      <a href="/"><input type="button" value="Try Again"></a>
     </div>
   </body>
 </html>

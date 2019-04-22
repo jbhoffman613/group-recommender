@@ -1,0 +1,4 @@
+MYSQL = {"port": 3306,
+         "user": "root",
+         "password": "PASSWORD"}
+csv_name = "Group Recommender - Data Collection (Responses) - Form Responses 1.csv"
