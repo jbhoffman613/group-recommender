@@ -11,6 +11,12 @@ class Controller:
         print("The user to match on is: {}".format(email))
         return toReturn
 
+    def get_id(self, email):
+        model = Model()
+        toReturn = model.getIdFromEmail(email)
+        model.close()
+        return toReturn
+
     def get_ideal(self):
         ideal_group = [
             {'username': 'Amin Khoury',

@@ -1,14 +1,5 @@
 from mysql.connector import (connection)
-# import config_flask as config
-
-
-class Config:
-    def __init__(self):
-        self.MYSQL = {"port": 3306,
-                      "user": "root",
-                      "password": "footloose12",
-                      "host": '127.0.0.1'}
-        self.csv_name = "Group Recommender - Data Collection (Responses) - Form Responses 1.csv"
+from recommender.model.config_flask import Config
 
 
 class Model:

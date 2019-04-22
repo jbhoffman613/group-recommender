@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template, request, url_for
-from flask_bootstrap import Bootstrap
+from flask import render_template, request
 from recommender.controller import Controller
+from recommender import app
 
 # Create app
-
-app = Flask(__name__)
-# Add bootstrap to app
 
 
 @app.route("/", methods=['GET'])
