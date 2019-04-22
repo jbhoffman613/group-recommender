@@ -1,10 +1,20 @@
 from mysql.connector import (connection)
-import config
+# import config_flask as config
+
+
+class Config:
+    def __init__(self):
+        self.MYSQL = {"port": 3306,
+                      "user": "root",
+                      "password": "footloose12",
+                      "host": '127.0.0.1'}
+        self.csv_name = "Group Recommender - Data Collection (Responses) - Form Responses 1.csv"
 
 
 class Model:
 
     def __init__(self):
+        config = Config()
         ''' Sets up basic connection and a cursor that returns each row as a dictioary'''
 
         self.cnx = connection.MySQLConnection(user=config.MYSQL['user'],
@@ -67,7 +77,6 @@ class Model:
         self.cursor.execute(query, (id0, id1))
         resultsMatchingSkills = self.cursor.fetchall()
         final_weight += resultsMatchingSkills[0]['valuesBroken'] * level_weight
-        print(final_weight)
         return final_weight
 
     def getSkillGroup(self, id0, id1, id2, id3):
@@ -195,22 +204,69 @@ class Model:
         ideal_group_members = []
         seen_groups = []
         all_user_ids = []
-        query = ('''select * from user_preference where user_preference.user_id={};'''.format(searcher))
+        query = ('''select user_id from user where user_id != {};'''.format(searcher))
         self.cursor.execute(query)
         resultsBrokenSkills = self.cursor.fetchall()
         for x in resultsBrokenSkills:
             all_user_ids.append(x["user_id"])
+        for i in range(0, len(all_user_ids)):
+            print("hit new i value: {}".format(all_user_ids[i]))
+            for j in range(i + 1, len(all_user_ids)):
+                for k in range(j + 1, len(all_user_ids)):
+                    new_min = self.getTotalScoreForGroup(searcher, all_user_ids[i], all_user_ids[j], all_user_ids[k])
+                    if new_min < min_score:
+                        min_score = new_min
+                        ideal_group_members = [all_user_ids[i], all_user_ids[j], all_user_ids[k]]
+                        seen_groups.append({i, j, k})
         return ideal_group_members
 
+    def getGroupMatesData(self, mateID):
+
+        # Get Skill Set infor
+        query = ('''SELECT
+                        skill_name
+                    FROM skillset
+                    INNER JOIN skill
+                        ON (skillset.skill_id = skill.skill_id)
+                    WHERE user_id = {};'''.format(mateID))
+        self.cursor.execute(query)
+        results = self.cursor.fetchall()
+        skillSet = []
+        for x in results:
+            skillSet.append(x["skill_name"])
+
+        # Get all the other info
+        query = ('''select name, email, phone_number from user where user_id = {};'''.format(mateID))
+        self.cursor.execute(query)
+        results = self.cursor.fetchall()
+        mate_name = results[0]["name"]
+        mate_email = results[0]["email"]
+        mate_number = results[0]["phone_number"]
+        return {'username': mate_name,
+                'email': mate_email,
+                'phonenumber': mate_number,
+                'skills': skillSet}
+
+    def getYourGroup(self, email):
+        searcherID = self.getIdFromEmail(email)
+        searcherID = searcherID['user_id']
+        if searcherID not in range(0, 1000):
+            return []
+        ideal_group_ids = self.findIdealGroup(searcherID)
+        group_info = []
+        for x in ideal_group_ids:
+            group_info.append(self.getGroupMatesData(x))
+        return group_info
+
     def close(self):
-        ''' close all connections '''
+        # close all connections
         self.cursor.close()
         self.cnx.close()
 
 
-model = Model()
-print("Final weight: {}".format(model.getTotalScoreForGroup(3, 4, 1, 2)))
-model.close()
+# model = Model()
+# print("Final weight: {}".format(model.getIdFromEmail("setteducati.s@husky.neu.edu")))
+# model.close()
 
 
 # Close all connections

@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
+from recommender.model.model import Model
 
 
 class Controller:
 
     def get_recommendations(self, email):
+        model = Model()
+        toReturn = model.getYourGroup(email)
+        model.close()
         print("The user to match on is: {}".format(email))
-        return self.get_ideal()
+        return toReturn
 
     def get_ideal(self):
         ideal_group = [
