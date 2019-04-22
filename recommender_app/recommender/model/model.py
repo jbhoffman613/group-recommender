@@ -31,18 +31,18 @@ class Model:
         query = ('select user_id, grade from user where user.user_id in (%s, %s) order by user_id;')
         self.cursor.execute(query, (id0, id1))
         results = self.cursor.fetchall()
-        final_weight = 0
 
-        if not (results[0]['grade'] > (results[1]['grade'] - 5) and (results[0]['grade'] < (results[1]['grade'] + 5))):
-            final_weight = grade_weight
-        return final_weight
+        if (len(results) > 1) and not (results[0]['grade'] > (results[1]['grade'] - 5) and (results[0]['grade'] < (results[1]['grade'] + 5))):
+            return grade_weight
+        return 0
 
     def getClassGradeGroup(self, id0, id1, id2, id3):
         total_weight = 0
         list_of_ids = [id0, id1, id2, id3]
         for i in range(0, len(list_of_ids)):
-            for j in range(i + 1, len(list_of_ids)):
-                total_weight += self.getClassGradeScore(list_of_ids[i], list_of_ids[j])
+            for j in range(0, len(list_of_ids)):
+                if i != j:
+                    total_weight += self.getClassGradeScore(list_of_ids[i], list_of_ids[j])
         return total_weight
 
     def getSkillWeight(self, id0, id1):
@@ -122,8 +122,6 @@ class Model:
         final_weight = resultsBrokenSkills[0]['valuesBroken'] * availability_weight
         return final_weight
 
-        return 0
-
     def getAvailabilityGroup(self, id0, id1, id2, id3):
         ''' Compute the weight for a group of 4 people on availability'''
         total_weight = 0
@@ -133,15 +131,85 @@ class Model:
                 if i != j:
                     total_weight += self.getAvailabilityWeight(list_of_ids[i], list_of_ids[j])
         return total_weight
+
+    def getPrefWeight(self, id0, id1):
+        ''' Return the weight if user 1 is not a preference of user 0.
+            This only matters if user 0 has at least one preferred partner. '''
+        pref_weight = 79
+        query = ('''select * from user_preference where user_preference.user_id={};'''.format(id0))
+        self.cursor.execute(query)
+        resultsBrokenSkills = self.cursor.fetchall()
+        if len(resultsBrokenSkills) == 1 and resultsBrokenSkills[0]['user_prefers'] != id1:
+            return pref_weight
+        elif len(resultsBrokenSkills) == 2 and (resultsBrokenSkills[0]['user_prefers'] != id1 and resultsBrokenSkills[1]['user_prefers'] != id1):
+            return pref_weight
         return 0
 
+    def getPrefGroup(self, id0, id1, id2, id3):
+        ''' Compute all weight for a proposed group of 4 based on their preferences '''
+        total_weight = 0
+        list_of_ids = [id0, id1, id2, id3]
+        for i in range(0, len(list_of_ids)):
+            for j in range(0, len(list_of_ids)):
+                if i != j:
+                    total_weight += self.getPrefWeight(list_of_ids[i], list_of_ids[j])
+        return total_weight
+
+    def getYearfWeight(self, id0, id1):
+        ''' Return a weight if the two individuals are more than a year apart '''
+        year_weight = 14
+        query = ('''select ABS((select year from user where user_id = %s) - (select year from user where user_id = %s)) as diff_year;''')
+        self.cursor.execute(query, (id0, id1))
+        resultsBrokenSkills = self.cursor.fetchall()
+        if resultsBrokenSkills[0]['diff_year'] > 1:
+            return year_weight
+        return 0
+
+    def getYearGroup(self, id0, id1, id2, id3):
+        ''' Return the weight for a proposed group based on their difference in year'''
+        total_weight = 0
+        list_of_ids = [id0, id1, id2, id3]
+        for i in range(0, len(list_of_ids)):
+            for j in range(0, len(list_of_ids)):
+                if i != j:
+                    total_weight += self.getYearfWeight(list_of_ids[i], list_of_ids[j])
+        return total_weight
+
+    def getTotalScoreForGroup(self, id0, id1, id2, i3):
+        ''' Consume four user IDs and compute the total weight for that proposed group '''
+        return (self.getClassGradeGroup(id0, id1, id2, i3)
+                + self.getSkillGroup(id0, id1, id2, i3)
+                + self.getInterestGroup(id0, id1, id2, i3)
+                + self.getAvailabilityGroup(id0, id1, id2, i3)
+                + self.getPrefGroup(id0, id1, id2, i3)
+                + self.getYearGroup(id0, id1, id2, i3))
+
+    def findIdealGroup(self, searcher):
+        ''' Computes the ideal group for a given searcher and returns the list
+            of IDs for the best group for that searcher
+
+            searcher - int
+            returns [int]'''
+
+        min_score = 1000000
+        ideal_group_members = []
+        seen_groups = []
+        all_user_ids = []
+        query = ('''select * from user_preference where user_preference.user_id={};'''.format(searcher))
+        self.cursor.execute(query)
+        resultsBrokenSkills = self.cursor.fetchall()
+        for x in resultsBrokenSkills:
+            all_user_ids.append(x["user_id"])
+        return ideal_group_members
+
     def close(self):
+        ''' close all connections '''
         self.cursor.close()
         self.cnx.close()
 
 
 model = Model()
-print("Final weight: {}".format(model.getAvailabilityGroup(3, 4, 1, 17)))
+print("Final weight: {}".format(model.getTotalScoreForGroup(3, 4, 1, 2)))
 model.close()
 
 
